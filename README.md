@@ -1,2 +1,2 @@
 # MusicHub
-Pet project written i FastAPI
+Pet project written in FastAPI
