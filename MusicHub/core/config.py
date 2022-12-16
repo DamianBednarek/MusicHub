@@ -5,7 +5,11 @@ import os
 class Settings(BaseSettings):
     PROJECT_NAME: str = "MusicHub"
     SECRET_KEY: str = "development"
-    DEFAULT_TOKEN_EXPIRATION_TIME = 30
+
+    # JWT
+    DEFAULT_TOKEN_EXPIRATION_TIME: int = 30
+    SECRET_KEY: str = os.getenv("JWT_KEY", "eUvy[{^~acFfIi")
+    ALGORITHM: str = "HS256"
 
     # Database connection
     SQL_USER: str = os.getenv("SQL_USER", "postgres")

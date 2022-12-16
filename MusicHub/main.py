@@ -7,7 +7,7 @@ from MusicHub.aws.bucket import upload_to_bucket
 from MusicHub.models import user
 from MusicHub.db.db import engine
 from MusicHub.logger import LoggerMiddleware
-
+from MusicHub.api.user import router
 
 user.Base.metadata.create_all(bind=engine)
 
@@ -16,6 +16,7 @@ app = FastAPI(title=settings.PROJECT_NAME)
 
 app.add_middleware(LoggerMiddleware, info_file="info.log", error_file="errors.log")
 
+app.include_router(router)
 
 # Test endpoints to check functionality
 

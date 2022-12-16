@@ -13,11 +13,11 @@ class LoggerMiddleware(BaseHTTPMiddleware):
             level="WARNING",
             backtrace=False,
             diagnose=False,
-            format="<green>{time:HH:mm:ss}</green> | {level} | <level>{message}</level>",
+            format="<green>{time:YYYY-MM-DD at HH:mm:ss}</green> | {level} | <level>{message}</level>",
         )
         logger.add(
             info_file,
-            format="{time:HH:mm:ss} | {level} |<level>{message}</level>",
+            format="{time:YYYY-MM-DD at HH:mm:ss} | {level} |<level>{message}</level>",
             backtrace=False,
             diagnose=False,
         )
@@ -29,7 +29,6 @@ class LoggerMiddleware(BaseHTTPMiddleware):
             diagnose=False,
         )
 
-    @logger.catch
     async def dispatch(self, request: Request, call_next):
         try:
 
@@ -40,3 +39,4 @@ class LoggerMiddleware(BaseHTTPMiddleware):
             return response
         except Exception as e:
             logger.error(f"{request.method} {request.url} | Error message: {str(e)}")
+            raise Exception(e)
