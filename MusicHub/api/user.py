@@ -11,8 +11,8 @@ router = APIRouter()
 
 @router.post("/create-user", response_model=userSchema.BaseUser)
 def create_user(user: userSchema.CreateUser, db: Session = Depends(get_db)):
-    user = userCrud.create_user(user, db)
-    if user:
+
+    if user := userCrud.create_user(user, db):
         return user
     else:
         raise HTTPException(

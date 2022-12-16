@@ -2,7 +2,6 @@ from MusicHub.schemas.userSchema import CreateUser
 from MusicHub.models.user import User
 from sqlalchemy.orm import Session
 from MusicHub.core.security import get_password_hash, check_passwords_match
-from psycopg2.errors import UniqueViolation
 
 
 def get_user_by_email(db: Session, email: str):

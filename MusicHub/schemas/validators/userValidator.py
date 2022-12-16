@@ -4,16 +4,7 @@ NAME_REGEX = "^[a-zA-Z][a-zA-Z\-\s]*$"
 PASSWORD_REGEX = "^.{8,64}$"
 
 
-def check_max_length(value: str, **kwargs) -> str:
-    if "max_length" in kwargs:
-        max_length = kwargs["max_length"]
-    else:
-        max_length = 30
-    assert len(value) <= max_length, f"value must be less than {max_length} characters"
-    return value
-
-
-def validate_first_last_name(value: str) -> str:
+def validate_names(value: str) -> str:
 
     assert re.match(
         NAME_REGEX, value
