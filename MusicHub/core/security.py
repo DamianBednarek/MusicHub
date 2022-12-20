@@ -1,7 +1,8 @@
-from passlib.context import CryptContext
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
+
 from jose import jwt
 from MusicHub.core.config import settings
+from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

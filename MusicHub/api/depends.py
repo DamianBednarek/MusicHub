@@ -1,5 +1,5 @@
-from MusicHub.db.db import SessionLocal
 from fastapi.security import OAuth2PasswordBearer
+from MusicHub.db.db import SessionLocal
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/login")
 

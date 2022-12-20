@@ -1,25 +1,31 @@
-from MusicHub.schemas.userSchema import CreateUser
+from MusicHub.core.security import check_passwords_match, get_password_hash
+from MusicHub.exceptions.userException import UserException
 from MusicHub.models.user import User
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from MusicHub.core.security import get_password_hash, check_passwords_match
 
 
 def get_user_by_email(db: Session, email: str):
     return db.query(User).filter(User.email == email).first()
 
 
-def create_user(user: CreateUser, db: Session):
-    user_dict = user.dict()
-    user_dict.pop("confirm_password")
-    user_dict["password"] = get_password_hash(user_dict["password"])
-    if get_user_by_email(db, user_dict["email"]):
-        return None
-    db_user = User(**user_dict)
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
+def create_user(db: Session, **kwargs):
+    try:
 
+        if "password" in kwargs:
+            kwargs["password"] = get_password_hash(kwargs["password"])
+        db_user = User(**kwargs)
+        db.add(db_user)
+        db.commit()
+        # db.refresh(db_user)
+    except IntegrityError:
+        raise UserException("This email address already exists")
     return db_user
+
+
+def make_user_active(db: Session, user: User):
+    user.is_active = True
+    db.commit()
 
 
 def autenticate_user(email: str, password: str, db: Session):

@@ -1,7 +1,5 @@
-from pydantic import BaseModel, EmailStr
-
-
 from MusicHub.core.config import settings
+from pydantic import BaseModel, EmailStr
 
 
 class EmailSchema(BaseModel):

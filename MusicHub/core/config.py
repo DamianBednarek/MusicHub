@@ -1,14 +1,18 @@
-from pydantic import BaseSettings
 import os
+
+from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "MusicHub"
     SECRET_KEY: str = "development"
 
+    # website link
+    LINK: str = "http://localhost:8000/"
+
     # JWT
     DEFAULT_TOKEN_EXPIRATION_TIME: int = 30
-    SECRET_KEY: str = os.getenv("JWT_KEY", "eUvy[{^~acFfIi")
+    SECRET_KEY: str = os.getenv("JWT_KEY")
     ALGORITHM: str = "HS256"
 
     # Database connection
@@ -32,6 +36,11 @@ class Settings(BaseSettings):
     AWS_ACCESS_KEY_ID: str = os.getenv("DJANGO_AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY: str = os.getenv("DJANGO_AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME: str = "musichubstorage"
+
+    # Google OAuth2
+    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID")
+    GOOGLE_CLIENT_SECRET: str = os.getenv("GOOGLE_CLIENT_SECRET")
+    SESSION_KEY: str = os.getenv("SESSION_KEY")
 
 
 settings = Settings()
