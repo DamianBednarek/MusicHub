@@ -1,9 +1,8 @@
 import sys
 
+from fastapi import Request
 from loguru import logger
 from starlette.middleware.base import BaseHTTPMiddleware
-
-from fastapi import Request
 
 
 class LoggerMiddleware(BaseHTTPMiddleware):

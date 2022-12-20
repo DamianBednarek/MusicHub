@@ -1,8 +1,11 @@
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+
 from MusicHub.core.security import check_passwords_match, get_password_hash
 from MusicHub.exceptions.userException import UserException
 from MusicHub.models.user import User
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
+
+from .codeCrud import get_code
 
 
 def get_user_by_email(db: Session, email: str):
@@ -35,3 +38,16 @@ def autenticate_user(email: str, password: str, db: Session):
     if not check_passwords_match(password, user.password):
         return None
     return user
+
+
+def reset_password(db: Session, code: str, password: str):
+    db_code = get_code(db, code, "reset_password")
+    if db_code:
+        user = db_code.user
+        if check_passwords_match(password, user.password):
+            raise UserException("New password must be different from old")
+        user.password = get_password_hash(password)
+        db.delete(db_code)
+        db.commit()
+    else:
+        raise UserException("Invalid code")

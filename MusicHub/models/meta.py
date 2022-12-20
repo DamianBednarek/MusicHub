@@ -1,9 +1,10 @@
 import uuid
 from datetime import datetime
 
-from MusicHub.db.db import Base
 from sqlalchemy import Column, DateTime
 from sqlalchemy.dialects.postgresql import UUID
+
+from MusicHub.db.db import Base
 
 
 class Meta(Base):

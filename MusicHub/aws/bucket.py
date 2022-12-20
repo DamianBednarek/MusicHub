@@ -1,7 +1,7 @@
 import boto3
-from MusicHub.core.config import settings
-
 from fastapi import UploadFile
+
+from MusicHub.core.config import settings
 
 
 def upload_to_bucket(file: UploadFile) -> None:

@@ -1,6 +1,7 @@
+from pydantic import UUID4, BaseModel, EmailStr, FileUrl, validator
+
 from MusicHub.schemas.validators.userValidator import (
     validate_confirm_password, validate_names, validate_password)
-from pydantic import UUID4, BaseModel, EmailStr, FileUrl, validator
 
 MIN_STR_LENGTH = 1
 MAX_STR_LENGTH = 30
@@ -23,7 +24,7 @@ class BaseUser(BaseModel):
         max_anystr_length = MAX_STR_LENGTH
 
 
-class CreateUser(BaseUser):
+class NewPasswordForm(BaseModel):
 
     password: str
     confirm_password: str
@@ -32,3 +33,11 @@ class CreateUser(BaseUser):
     _validate_confrim_password = validator("confirm_password")(
         validate_confirm_password
     )
+
+
+class CreateUser(BaseUser, NewPasswordForm):
+    pass
+
+
+class ForgotPasswordUser(BaseModel):
+    email: EmailStr

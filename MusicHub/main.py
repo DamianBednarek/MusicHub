@@ -1,12 +1,12 @@
+from fastapi import FastAPI
+from starlette.middleware.sessions import SessionMiddleware
+
 from MusicHub.api.user import router
 from MusicHub.core.config import settings
 from MusicHub.db.db import engine
 from MusicHub.exceptions.handler import CustomException, user_exception_handler
 from MusicHub.logger import LoggerMiddleware
 from MusicHub.models import meta
-from starlette.middleware.sessions import SessionMiddleware
-
-from fastapi import FastAPI
 
 meta.Base.metadata.create_all(bind=engine)
 

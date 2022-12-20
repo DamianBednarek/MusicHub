@@ -5,7 +5,6 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "MusicHub"
-    SECRET_KEY: str = "development"
 
     # website link
     LINK: str = "http://localhost:8000/"
