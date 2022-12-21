@@ -31,15 +31,6 @@ def make_user_active(db: Session, user: User):
     db.commit()
 
 
-def autenticate_user(email: str, password: str, db: Session):
-    user = get_user_by_email(db, email)
-    if not user:
-        return None
-    if not check_passwords_match(password, user.password):
-        return None
-    return user
-
-
 def reset_password(db: Session, code: str, password: str):
     db_code = get_code(db, code, "reset_password")
     if db_code:
