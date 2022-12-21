@@ -1,7 +1,10 @@
-from pydantic import UUID4, BaseModel, EmailStr, FileUrl, validator
+from pydantic import BaseModel, EmailStr, FileUrl, validator
 
 from MusicHub.schemas.validators.userValidator import (
-    validate_confirm_password, validate_names, validate_password)
+    validate_confirm_password,
+    validate_names,
+    validate_password,
+)
 
 MIN_STR_LENGTH = 1
 MAX_STR_LENGTH = 30
