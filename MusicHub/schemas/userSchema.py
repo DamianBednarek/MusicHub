@@ -44,3 +44,16 @@ class CreateUser(BaseUser, NewPasswordForm):
 
 class ForgotPasswordUser(BaseModel):
     email: EmailStr
+
+
+class UpdateUser(BaseModel):
+    first_name: str
+    last_name: str
+
+    _check_first_last_name = validator("first_name", "last_name", allow_reuse=True)(
+        validate_names
+    )
+
+    class Config:
+        min_anystr_length = MIN_STR_LENGTH
+        max_anystr_length = MAX_STR_LENGTH

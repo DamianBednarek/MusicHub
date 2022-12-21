@@ -42,3 +42,12 @@ def reset_password(db: Session, code: str, password: str):
         db.commit()
     else:
         raise UserException("Invalid code")
+
+
+def update_user(user: User, db: Session, **kwargs):
+    for key, value in kwargs.items():
+        setattr(user, key, value)
+    db.add(user)
+    db.commit()
+
+    return user
