@@ -5,7 +5,6 @@ PASSWORD_REGEX = "^.{8,64}$"
 
 
 def validate_names(value: str) -> str:
-
     assert re.match(
         NAME_REGEX, value
     ), "name must start and ends with letter and can contain only ' ' or '-' special characters"

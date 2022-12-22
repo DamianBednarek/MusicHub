@@ -14,7 +14,6 @@ meta.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
-
 app.add_middleware(SessionMiddleware, secret_key=settings.SESSION_KEY)
 app.add_middleware(LoggerMiddleware, info_file="info.log", error_file="errors.log")
 

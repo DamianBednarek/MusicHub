@@ -9,10 +9,10 @@ class EmailSchema(BaseModel):
 
 def register_template_body(recipient: str, link: str, hours: int = 24) -> str:
     return f"""<p>Welcome {recipient}!<p> 
-Please follow the link to finish the regstration process. 
+Please follow the link to finish the registration process. 
 Please note that the link is valid only for {hours}h. 
 <br> {link} <br>
-<i>Sincerly your {settings.PROJECT_NAME} team.</i>"""
+<i>Sincerely your {settings.PROJECT_NAME} team.</i>"""
 
 
 def password_reset_template_body(recipient: str, link: str, hours: int = 24) -> str:
@@ -20,4 +20,4 @@ def password_reset_template_body(recipient: str, link: str, hours: int = 24) -> 
 Seems like you are having trouble with password, use link below to reset your password. 
 Please note that the link is valid only for {hours}h. 
 <br> {link} <br>
-<i>Sincerly your {settings.PROJECT_NAME} team.</i>"""
+<i>Sincerely your {settings.PROJECT_NAME} team.</i>"""

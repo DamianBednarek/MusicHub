@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 
-from MusicHub.exceptions.codeException import CodeException
 from MusicHub.models.code import Code
 
 

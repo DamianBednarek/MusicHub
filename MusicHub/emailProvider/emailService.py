@@ -27,13 +27,13 @@ templates = {
 
 async def send_email(
     subject: str,
-    recipents: list[str],
+    recipients: list[str],
     body: str,
     subtype: MessageType = MessageType.html,
 ) -> bool:
     message = MessageSchema(
         subject=subject,
-        recipients=recipents,
+        recipients=recipients,
         body=body,
         subtype=subtype,
     )

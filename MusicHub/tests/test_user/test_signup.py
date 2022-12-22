@@ -59,5 +59,3 @@ class TestUserRegistration:
         self.user["first_name"] = first_name
         self.user["last_name"] = last_name
         make_request(client, self.user, 422)
-
-
