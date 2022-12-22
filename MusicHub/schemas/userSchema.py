@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, FileUrl, validator
+from pydantic import BaseModel, EmailStr, FileUrl, validator, Extra
 
 from MusicHub.schemas.validators.userValidator import (
     validate_confirm_password,
@@ -25,6 +25,8 @@ class BaseUser(BaseModel):
         orm_mode = True
         min_anystr_length = MIN_STR_LENGTH
         max_anystr_length = MAX_STR_LENGTH
+        anystr_strip_whitespace = True
+        extra = Extra.forbid
 
 
 class NewPasswordForm(BaseModel):

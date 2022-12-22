@@ -49,7 +49,7 @@ def send_email_with_code(template: str):
         template (str): template to be used, choices are 'register', 'password_reset'
     """
 
-    def wraper(func):
+    def wrapper(func):
         @wraps(func)
         def decorator(*args, **kwargs):
             response = func(*args, **kwargs)
@@ -62,8 +62,8 @@ def send_email_with_code(template: str):
                 [email],
                 templates[template][1](email, response.get("link")),
             )
-            return {"message": "Sucessfull action, check your email to finish process"}
+            return {"message": "Successful action, check your email to finish process"}
 
         return decorator
 
-    return wraper
+    return wrapper
