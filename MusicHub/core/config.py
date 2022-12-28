@@ -8,6 +8,8 @@ class Settings(BaseSettings):
 
     # website link
     LINK: str = "http://localhost:8000/"
+    # Storage link
+    STORAGE_LINK: str = "https://musichubstorage.s3.eu-central-1.amazonaws.com"
 
     # JWT
     DEFAULT_TOKEN_EXPIRATION_TIME: int = 30

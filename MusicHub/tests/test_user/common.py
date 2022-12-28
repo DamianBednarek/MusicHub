@@ -9,7 +9,7 @@ from .userFactory import UserFactory
 
 def make_post_request(client: TestClient, response_status: int = 422, **kwargs):
     response = client.post(**kwargs)
-    print(response.content)  # TODO remove
+
     assert response.status_code == response_status
     return response
 
@@ -23,7 +23,7 @@ def make_get_request(client: TestClient, response_status: int = 422, **kwargs):
 
 def make_patch_request(client: TestClient, response_status: int = 422, **kwargs):
     response = client.patch(**kwargs)
-    print(response.content)  # TODO remove
+   
     assert response.status_code == response_status
     return response
 

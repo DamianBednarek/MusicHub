@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.sessions import SessionMiddleware
 
 from MusicHub.api.auth import router as auth_router
+from MusicHub.api.track import router as track_router
 from MusicHub.api.user import router as user_router
 from MusicHub.core.config import settings
 from MusicHub.db.db import engine
@@ -22,3 +23,4 @@ app.add_exception_handler(JwtException, jwt_exception_handler)
 
 app.include_router(auth_router, tags=["authentication and registration"])
 app.include_router(user_router, tags=["user"])
+app.include_router(track_router, tags=["track"])

@@ -1,9 +1,7 @@
 from fastapi import UploadFile
 
-ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png"]
 
-
-def validate_file(file: UploadFile):
+def validate_file(file: UploadFile, allowed_extensions):
     assert (
-            file.filename.split(".")[-1] in ALLOWED_EXTENSIONS
+            file.filename.split(".")[-1] in allowed_extensions
     ), "File extension is not allowed"
