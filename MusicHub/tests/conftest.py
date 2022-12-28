@@ -8,10 +8,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy_utils import database_exists, create_database
 
-from MusicHub.api.depends import get_db
+from MusicHub.api.depends import get_db, get_current_user
 from MusicHub.core.config import settings
 from MusicHub.db.db import Base
 from MusicHub.main import app
+from MusicHub.tests.test_user.userFactory import UserFactory
 
 
 @pytest.fixture(scope="session")
@@ -44,3 +45,22 @@ def client(db):
 
     with TestClient(app) as c:
         yield c
+
+
+@pytest.fixture(autouse=True)
+def provide_session_to_factories(db):
+    UserFactory._meta.sqlalchemy_session = db
+
+
+@pytest.fixture()
+def get_user():
+    return UserFactory()
+
+
+@pytest.fixture(scope="function")
+def get_auth_user(get_user):
+    user = get_user
+    app.dependency_overrides[get_current_user] = lambda: get_user
+    yield user
+    app.dependency_overrides = {}
+

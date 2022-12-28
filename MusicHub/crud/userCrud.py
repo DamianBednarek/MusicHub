@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from MusicHub.core.security import check_passwords_match, get_password_hash
 from MusicHub.exceptions.userException import UserException
 from MusicHub.models.user import User
-
 from .codeCrud import get_code
 
 
@@ -36,12 +35,12 @@ def reset_password(db: Session, code: str, password: str):
     if db_code:
         user = db_code.user
         if check_passwords_match(password, user.password):
-            raise UserException("New password must be different from old")
+            raise UserException("New password must be different from old", 422)
         user.password = get_password_hash(password)
         db.delete(db_code)
         db.commit()
     else:
-        raise UserException("Invalid code")
+        raise UserException("Invalid code", 422)
 
 
 def update_user(user: User, db: Session, **kwargs):

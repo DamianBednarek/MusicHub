@@ -1,8 +1,8 @@
 from fastapi import BackgroundTasks, Depends, Request, status
-
-from sqlalchemy.orm import Session
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
+from sqlalchemy.orm import Session
+
 from MusicHub.api.depends import get_db, authenticate_user
 from MusicHub.core.config import settings
 from MusicHub.core.oauth2.oauth import oauth
@@ -11,23 +11,22 @@ from MusicHub.crud import codeCrud, userCrud
 from MusicHub.crud.codeCrud import confirm_user
 from MusicHub.emailProvider.emailService import send_email_with_code
 from MusicHub.exceptions.codeException import CodeException
-from MusicHub.schemas import tokenSchema, userSchema
 from MusicHub.models.user import User
+from MusicHub.schemas import userSchema
 
 router = InferringRouter()
 
 
 @cbv(router)
 class AuthCBV:
-
     db: Session = Depends(get_db)
 
     @router.post("/sign-up", status_code=status.HTTP_201_CREATED)
     @send_email_with_code("register")
     def register(
-        self,
-        user: userSchema.CreateUser,
-        background_task: BackgroundTasks,
+            self,
+            user: userSchema.CreateUser,
+            background_task: BackgroundTasks,
     ) -> dict[str, str]:
         """Register new user"""
         user = userCrud.create_user(
@@ -44,7 +43,7 @@ class AuthCBV:
     def verify_signup(self, code: str) -> dict[str, str]:
         """Verify user account from link sent by email"""
         confirm_user(self.db, code)
-        return {"message": "Youe have successfully verified your account"}
+        return {"message": "You have successfully verified your account"}
 
     @router.post("/login")
     def login(self, user: User = Depends(authenticate_user)) -> dict[str, str]:
@@ -56,8 +55,8 @@ class AuthCBV:
         }
 
     @router.get("/auth", include_in_schema=False)
-    async def auth(self, request: Request) -> userSchema.BaseUser | tokenSchema.Token:
-        """Handle creating or loging in a user from google sign page"""
+    async def auth(self, request: Request) -> userSchema.BaseUser | dict[str, str]:
+        """Handle creating or loging in a user from Google sign page"""
 
         token = await oauth.google.authorize_access_token(request)
         google_user = token.get("userinfo")
@@ -79,7 +78,7 @@ class AuthCBV:
 
     @router.post("/password-recovery")
     def password_recovery(
-        self, code: str, password_form: userSchema.NewPasswordForm
+            self, code: str, password_form: userSchema.NewPasswordForm
     ) -> dict[str, str]:
         userCrud.reset_password(self.db, code, password_form.dict().get("password"))
         return {"message": "Password changed successfully"}
@@ -87,16 +86,16 @@ class AuthCBV:
     @router.post("/reset-password")
     @send_email_with_code("password_reset")
     def reset_password(
-        self,
-        user: userSchema.ForgotPasswordUser,
-        background_task: BackgroundTasks,
+            self,
+            user: userSchema.ForgotPasswordUser,
+            background_task: BackgroundTasks,
     ) -> dict[str, str]:
         db_user = userCrud.get_user_by_email(self.db, user.email)
         if db_user:
             code = codeCrud.create_code(self.db, db_user, "reset_password")
             return {"link": f"{settings.LINK}password-recovery?code={code}"}
         else:
-            raise CodeException("No accout with given email")
+            raise CodeException("No account with given email")
 
 
 @router.get("/google-signup")
