@@ -1,0 +1,5 @@
+MIN_STR_LENGTH = 1
+MAX_STR_LENGTH = 30
+
+NAME_REGEX = "^[a-zA-Z][a-zA-Z\-\s]*$"
+PASSWORD_REGEX = "^.{8,64}$"
