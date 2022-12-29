@@ -8,6 +8,7 @@ from .crud import create_code, delete_code
 from .models import Code
 from .validators import validate_code
 from ..core.security import create_token
+from ..users.models import User
 
 
 async def register_user(db: Session, user: user_schema.CreateUser) -> str:
@@ -21,13 +22,13 @@ async def register_user(db: Session, user: user_schema.CreateUser) -> str:
     return await create_code(db, user, CodeType.VERIFY)
 
 
-async def confirm_user(db: Session, code: Code):
+async def confirm_user(db: Session, code: Code) -> None:
     validate_code(code)
     await make_user_active(db, code.user)
     await delete_code(db, code)
 
 
-async def register_or_login_google(db: Session, google_user: dict):
+async def register_or_login_google(db: Session, google_user: dict) -> str | User:
     if user_crud.get_user_by_email(db, google_user["email"]):
         return create_token({"sub": google_user["email"]})
     else:

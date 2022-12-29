@@ -38,5 +38,4 @@ async def update_user(user: User, db: Session, **kwargs) -> User:
         setattr(user, key, value)
     db.add(user)
     db.commit()
-
     return user

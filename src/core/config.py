@@ -4,7 +4,7 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "src"
+    PROJECT_NAME: str = "MusicHub"
 
     # website link
     LINK: str = "http://localhost:8000/"

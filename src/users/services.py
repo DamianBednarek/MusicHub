@@ -19,7 +19,7 @@ async def upload_picture(file: UploadFile, bg_task: BackgroundTasks, current_use
     )
 
 
-async def reset_password(db: Session, password: str, db_code: Code):
+async def reset_password(db: Session, password: str, db_code: Code) -> None:
     user = db_code.user
     if check_passwords_match(password, user.password):
         raise UserException("New password must be different from old", 422)

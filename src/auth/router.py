@@ -32,8 +32,7 @@ class AuthCBV:
         return {"link": f"{settings.LINK}signup-verify?code={code}"}
 
     @router.get("/signup-verify")
-    async def verify_signup(self, db_code: Code = Depends(GetValidCode(CodeType.VERIFY)),
-                            ) -> JSONResponse:
+    async def verify_signup(self, db_code: Code = Depends(GetValidCode(CodeType.VERIFY))) -> JSONResponse:
         await confirm_user(self.db, db_code)
         return JSONResponse(content={"message": "You have successfully verified your account"})
 

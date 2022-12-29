@@ -17,4 +17,8 @@ class TrackCBV:
 
     @router.post("/upload-track")
     async def upload_track(self, bg_task: BackgroundTasks, file: UploadFile, is_public: bool = Form()) -> BaseTrack:
-        return await upload_track(self.db, file, bg_task, created_by=self.current_user.email, is_public=is_public)
+        return await upload_track(
+            self.db,
+            file, bg_task,
+            created_by=self.current_user.email,
+            is_public=is_public)

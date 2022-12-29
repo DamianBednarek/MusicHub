@@ -29,7 +29,7 @@ async def send_email(
         recipients: list[str],
         body: str,
         subtype: MessageType = MessageType.html,
-) -> bool:
+) -> None:
     message = MessageSchema(
         subject=subject,
         recipients=recipients,
