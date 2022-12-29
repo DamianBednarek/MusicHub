@@ -1,6 +1,5 @@
 from fastapi import BackgroundTasks, Depends, Request, APIRouter, Body
 from fastapi_utils.cbv import cbv
-# from fastapi_utils.inferring_router import InferringRouter
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
@@ -13,7 +12,7 @@ from src.users import schemas as user_schema
 from src.users.models import User
 from src.users.services import reset_password
 from .crud import create_code
-from .dependecies import authenticate_user, get_valid_code, get_valid_reset_code
+from .dependecies import authenticate_user, GetValidCode
 from .models import Code
 from .services import register_user, register_or_login_google, confirm_user
 from .validators import check_if_code_already_exists
@@ -33,7 +32,8 @@ class AuthCBV:
         return {"link": f"{settings.LINK}signup-verify?code={code}"}
 
     @router.get("/signup-verify")
-    async def verify_signup(self, db_code: Code = Depends(get_valid_code)) -> JSONResponse:
+    async def verify_signup(self, db_code: Code = Depends(GetValidCode(CodeType.VERIFY)),
+                            ) -> JSONResponse:
         await confirm_user(self.db, db_code)
         return JSONResponse(content={"message": "You have successfully verified your account"})
 
@@ -58,7 +58,8 @@ class AuthCBV:
 
     @router.post("/password-recovery")
     async def password_recovery(
-            self, password_form: user_schema.NewPasswordForm, db_code: Code = Depends(get_valid_reset_code)
+            self, password_form: user_schema.NewPasswordForm,
+            db_code: Code = Depends(GetValidCode(CodeType.PASSWORD_RESET))
     ) -> dict[str, str]:
         await reset_password(self.db, password_form.password, db_code)
         return {"message": "Password changed successfully"}

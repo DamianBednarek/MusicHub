@@ -1,6 +1,5 @@
-from fastapi import Depends, BackgroundTasks, UploadFile, Form
+from fastapi import Depends, BackgroundTasks, UploadFile, Form, APIRouter
 from fastapi_utils.cbv import cbv
-from fastapi_utils.inferring_router import InferringRouter
 from sqlalchemy.orm import Session
 
 from src.common.dependecies import get_current_user, get_db
@@ -8,7 +7,7 @@ from src.tracks.schemas import BaseTrack
 from src.users.models import User
 from .services import upload_track
 
-router = InferringRouter()
+router = APIRouter()
 
 
 @cbv(router)

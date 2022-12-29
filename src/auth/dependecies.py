@@ -3,7 +3,6 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from src.auth.crud import get_code
-from src.auth.models import Code
 from src.common.constants import CodeType
 from src.common.dependecies import get_db, user_exists
 from src.core.security import check_passwords_match
@@ -12,18 +11,16 @@ from src.users.exceptions import UserException
 from src.users.models import User
 
 
-async def get_valid_code(code: str, db: Session = Depends(get_db)) -> Code:
-    if db_code := await get_code(db, code, CodeType.VERIFY):
-        return db_code
-    else:
-        raise CodeException("Invalid code")
+class GetValidCode:
 
+    def __init__(self, code_type: CodeType):
+        self.code_type = code_type
 
-async def get_valid_reset_code(code: str, db: Session = Depends(get_db)) -> Code:
-    if db_code := await get_code(db, code, CodeType.PASSWORD_RESET):
-        return db_code
-    else:
-        raise CodeException("Invalid code")
+    async def __call__(self, code: str, db: Session = Depends(get_db)):
+        if db_code := await get_code(db, code, self.code_type):
+            return db_code
+        else:
+            raise CodeException("Invalid code")
 
 
 async def authenticate_user(
