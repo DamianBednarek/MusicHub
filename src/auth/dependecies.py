@@ -19,8 +19,7 @@ class GetValidCode:
     async def __call__(self, code: str, db: Session = Depends(get_db)):
         if db_code := await get_code(db, code, self.code_type):
             return db_code
-        else:
-            raise CodeException("Invalid code")
+        raise CodeException("Invalid code")
 
 
 async def authenticate_user(

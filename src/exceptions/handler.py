@@ -14,3 +14,10 @@ async def user_exception_handler(request: Request, exc: CustomException):
         status_code=exc.status_code,
         content={"error": exc.value},
     )
+
+
+async def validation_exception_handler(request: Request, exc: ValueError):
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={"error": str(exc)}
+    )

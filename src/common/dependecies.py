@@ -42,5 +42,4 @@ async def get_current_user(
 async def user_exists(email: str | dict, db: Session = Depends(get_db)) -> User:
     if user := await get_user_by_email(db, email["email"] if type(email) is dict else email):
         return user
-    else:
-        raise UserException("User not found")
+    raise UserException("User not found")

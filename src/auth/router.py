@@ -1,7 +1,6 @@
 from fastapi import BackgroundTasks, Depends, Request, APIRouter, Body
 from fastapi_utils.cbv import cbv
 from sqlalchemy.orm import Session
-from starlette.responses import JSONResponse
 
 from src.auth.oauth2.oauth import oauth
 from src.common.dependecies import get_db, user_exists
@@ -32,20 +31,20 @@ class AuthCBV:
         return {"link": f"{settings.LINK}signup-verify?code={code}"}
 
     @router.get("/signup-verify")
-    async def verify_signup(self, db_code: Code = Depends(GetValidCode(CodeType.VERIFY))) -> JSONResponse:
+    async def verify_signup(self, db_code: Code = Depends(GetValidCode(CodeType.VERIFY))) -> dict[str, str]:
         await confirm_user(self.db, db_code)
-        return JSONResponse(content={"message": "You have successfully verified your account"})
+        return {"message": "You have successfully verified your account"}
 
     @router.post("/login")
-    def login(self, user: User = Depends(authenticate_user)) -> JSONResponse:
+    def login(self, user: User = Depends(authenticate_user)) -> dict[str, str]:
 
-        return JSONResponse(content={
+        return {
             "access_token": create_token({"sub": user.email}),
             "token_type": "Bearer",
-        })
+        }
 
     @router.get("/auth", include_in_schema=False)
-    async def auth(self, request: Request) -> user_schema.BaseUser | JSONResponse:
+    async def auth(self, request: Request) -> user_schema.BaseUser | dict[str, str]:
 
         token = await oauth.google.authorize_access_token(request)
 
@@ -53,7 +52,7 @@ class AuthCBV:
         if isinstance(result, User):
             return result
         else:
-            return JSONResponse(content={"access_token": result, "token_type": "Bearer"})
+            return {"access_token": result, "token_type": "Bearer"}
 
     @router.post("/password-recovery")
     async def password_recovery(
