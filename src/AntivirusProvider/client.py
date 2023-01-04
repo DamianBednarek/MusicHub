@@ -33,14 +33,14 @@ class AntivirusScan:
         async with httpx.AsyncClient() as client:
             r = r_content_to_dict(
                 await client.post(url=self.antivirus_url, files={"file": file_obj.file}, headers=self.post_headers))
-            file_id = r.get("data_id")
 
-            result = await self.wait_for_scan(file_id, client)
+            result = await self.wait_for_scan(r.get("data_id"), client)
 
             if result.get("scan_results").get("scan_all_result_i") in self.bad_statuses:
                 raise CustomException("File cannot be uploaded")
 
     async def wait_for_scan(self, file_id: str, client: httpx.AsyncClient, attempts: int = 10) -> dict:
+
         for i in range(attempts):
             r = r_content_to_dict(
                 await client.get(url=f"{self.antivirus_url}/{file_id}", headers=self.get_headers))

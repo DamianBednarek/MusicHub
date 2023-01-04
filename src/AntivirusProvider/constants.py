@@ -25,4 +25,4 @@ class AntivirusStatuses(Enum):
     FILETYPE_NOT_SUPPORTED = 23
 
 
-BAD_STATUSES = (x for x in AntivirusStatuses)
+BAD_STATUSES = [x.value for x in AntivirusStatuses]
