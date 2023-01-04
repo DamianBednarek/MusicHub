@@ -14,7 +14,7 @@ from .crud import create_code
 from .dependecies import authenticate_user, GetValidCode
 from .models import Code
 from .schemas import Token
-from .services import register_user, register_or_login_google, confirm_user
+from .services import register_user, register_and_login_google, confirm_user
 from .validators import check_if_code_already_exists
 from ..common.constants import CodeType
 from ..core.defaultResponse import DefaultResponse
@@ -42,18 +42,11 @@ class AuthCBV:
         return token
 
     @router.get("/auth", include_in_schema=False)
-    async def auth(self, request: Request) -> user_schema.BaseUser | DefaultResponse:
-
+    async def auth(self, request: Request) -> Token:
         token = await oauth.google.authorize_access_token(request)
 
-        result = await register_or_login_google(self.db, token.get("userinfo"))
-        if isinstance(result, User):
-            return result
-        else:
-            return DefaultResponse(msg="Successful action", details={
-                "access_token": result,
-                "token_type": "Bearer",
-            })
+        result = await register_and_login_google(self.db, token.get("userinfo"))
+        return result
 
     @router.post("/password-recovery")
     async def password_recovery(
@@ -67,7 +60,6 @@ class AuthCBV:
     @send_email_with_code("password_reset")
     async def reset_password(self, bg_task: BackgroundTasks, email: str = Body(embed=True),
                              db_user: User = Depends(user_exists)) -> DefaultResponse:
-
         await check_if_code_already_exists(self.db, db_user, CodeType.PASSWORD_RESET)
         code = await create_code(self.db, db_user, "reset_password")
         return DefaultResponse(msg=f"{settings.LINK}password-recovery?code={code}")
