@@ -5,6 +5,7 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "MusicHub"
+    CODE_EXPIRATION_TIME_HOURS: int = 24
 
     # website link
     LINK: str = "http://localhost:8000/"

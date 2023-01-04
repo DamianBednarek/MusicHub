@@ -29,14 +29,9 @@ async def get_current_user(
             token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
         email: str = payload.get("sub")
-        if email is None:
-            raise JwtException()
-    except JWTError:
-        raise JwtException()
-    user = await get_user_by_email(db, email)
-    if user is None:
-        raise JwtException()
-    return user
+    except JWTError as e:
+        raise JwtException(str(e))
+    return await user_exists(email, db)
 
 
 async def user_exists(email: str | dict, db: Session = Depends(get_db)) -> User:

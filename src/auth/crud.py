@@ -11,7 +11,7 @@ def _generate_code():
     return binascii.hexlify(os.urandom(20)).decode("utf-8")
 
 
-async def get_code(db: Session, code: str, code_type: str):
+async def get_code(db: Session, code: str, code_type: str) -> Code:
     return (
         db.query(Code)
         .filter(Code.code == code)
@@ -20,7 +20,7 @@ async def get_code(db: Session, code: str, code_type: str):
     )
 
 
-async def get_code_for_user(db: Session, user: User, code_type: str):
+async def get_code_for_user(db: Session, user: User, code_type: str) -> Code:
     return (
         db.query(Code)
         .filter(Code.user_id == user.id)
@@ -29,7 +29,7 @@ async def get_code_for_user(db: Session, user: User, code_type: str):
     )
 
 
-async def create_code(db: Session, user: User, code_type: str):
+async def create_code(db: Session, user: User, code_type: str) -> str:
     db_code = Code(code=_generate_code(), user=user, code_type=code_type)
     db.add(db_code)
     db.commit()
@@ -37,6 +37,6 @@ async def create_code(db: Session, user: User, code_type: str):
     return db_code.code
 
 
-async def delete_code(db: Session, code: Code):
+async def delete_code(db: Session, code: Code) -> None:
     db.delete(code)
     db.commit()

@@ -1,12 +1,10 @@
 from functools import wraps
+from pathlib import Path
 
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
 
 from src.core.config import settings
-from src.emailProvider.email import (
-    password_reset_template_body,
-    register_template_body,
-)
+from src.core.defaultResponse import DefaultResponse
 
 conf = ConnectionConfig(
     MAIL_USERNAME=settings.EMAIL_USERNAME,
@@ -16,29 +14,24 @@ conf = ConnectionConfig(
     MAIL_SERVER=settings.EMAIL_SERVER,
     MAIL_STARTTLS=settings.MAIL_STARTTLS,
     MAIL_SSL_TLS=settings.MAIL_SSL_TLS,
+    TEMPLATE_FOLDER=Path(__file__).parent / 'templates'
 )
-
-templates = {
-    "register": ["Finish your registration", register_template_body],
-    "password_reset": ["Password reset request", password_reset_template_body],
+subjects = {
+    "register": "Finish your registration",
+    "password_reset": "Password reset request"
 }
 
 
-async def send_email(
-        subject: str,
-        recipients: list[str],
-        body: str,
-        subtype: MessageType = MessageType.html,
-) -> None:
+async def send_email(template_name: str, recipients: list[str], body: dict) -> None:
     message = MessageSchema(
-        subject=subject,
+        subject=subjects[template_name],
         recipients=recipients,
-        body=body,
-        subtype=subtype,
+        template_body=body,
+        subtype=MessageType.html,
     )
 
     fm = FastMail(conf)
-    await fm.send_message(message)
+    await fm.send_message(message, template_name=f"{template_name}.html")
 
 
 def send_email_with_code(template: str):
@@ -52,16 +45,19 @@ def send_email_with_code(template: str):
         @wraps(func)
         async def decorator(*args, **kwargs):
             response = await func(*args, **kwargs)
-            bg_task = kwargs.get("bg_task")
-            email = kwargs.get("user").email
-
+            _, user, bg_task = kwargs.values()
+            body = {
+                "link": response.get("msg"),
+                "recipient": user.email,
+                "hours": settings.CODE_EXPIRATION_TIME_HOURS
+            }
             bg_task.add_task(
                 send_email,
-                templates[template][0],
-                [email],
-                templates[template][1](email, response.get("link")),
+                template,
+                [user.email],
+                body,
             )
-            return {"message": "Successful action, check your email to finish process"}
+            return DefaultResponse(msg="Successful action, check your email to finish process")
 
         return decorator
 

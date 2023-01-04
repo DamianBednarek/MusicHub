@@ -4,6 +4,7 @@ from fastapi_utils.inferring_router import InferringRouter
 from sqlalchemy.orm import Session
 
 from src.common.dependecies import get_current_user, get_db
+from src.core.defaultResponse import DefaultResponse
 from src.users import crud
 from src.users.models import User
 from src.users.schemas import BaseUser, UpdateUser
@@ -26,8 +27,6 @@ class UserCBV:
         return await crud.update_user(self.current_user, self.db, **user.dict())
 
     @router.post("/upload-photo")
-    async def upload_photo(self, file: UploadFile, bg_task: BackgroundTasks) -> dict[str, str]:
+    async def upload_photo(self, file: UploadFile, bg_task: BackgroundTasks) -> DefaultResponse:
         user = await upload_picture(file, bg_task, self.current_user, self.db)
-        return {"link": user.profile_avatar}
-
-    
+        return DefaultResponse(msg="Successful action", details={"link": user.profile_avatar})
