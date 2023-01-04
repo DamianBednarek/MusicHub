@@ -7,8 +7,8 @@ from httpx import AsyncClient
 from sqlalchemy.orm import Session
 
 from src.auth.crud import create_code, get_code
+from src.tests.common import make_post_request, make_get_request, init_db_with_test_user
 from src.users.models import User
-from .common import make_post_request, make_get_request, init_db_with_test_user
 from .userFactory import UserFactory, UserRegisterFactory
 
 

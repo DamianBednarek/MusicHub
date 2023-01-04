@@ -43,5 +43,8 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_SECRET: str = os.getenv("GOOGLE_CLIENT_SECRET")
     SESSION_KEY: str = os.getenv("SESSION_KEY")
 
+    # ANTIVIRUS
+    ANTIVIRUS_API_KEY: str = os.getenv("ANTIVIRUS_API_KEY")
+
 
 settings = Settings()

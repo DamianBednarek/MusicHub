@@ -1,8 +1,8 @@
 import pytest
 from httpx import AsyncClient
 
+from src.tests.common import make_post_request
 from src.users.models import User
-from .common import make_post_request
 from .userFactory import UserFactory
 
 
