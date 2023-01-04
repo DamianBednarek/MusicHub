@@ -3,18 +3,6 @@ import factory
 from src.tracks.models import Track
 
 
-class UploadTrackFactory(factory.Factory):
-    class Meta:
-        model = Track
-
-    is_public = factory.Faker('boolean')
-
-    @factory.lazy_attribute
-    def file(self, filename):
-        with open(filename, "rb") as fp:
-            return fp
-
-
 class TrackFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = Track
