@@ -18,7 +18,7 @@ conf = ConnectionConfig(
 )
 subjects = {
     "register": "Finish your registration",
-    "password_reset": "Password reset request"
+    "reset_password": "Password reset request"
 }
 
 
@@ -45,9 +45,10 @@ def send_email_with_code(template: str):
         @wraps(func)
         async def decorator(*args, **kwargs):
             response = await func(*args, **kwargs)
-            _, user, bg_task = kwargs.values()
+            user = kwargs["user"]
+            bg_task = kwargs["bg_task"]
             body = {
-                "link": response.get("msg"),
+                "link": response.msg,
                 "recipient": user.email,
                 "hours": settings.CODE_EXPIRATION_TIME_HOURS
             }

@@ -57,11 +57,11 @@ class AuthCBV:
         return DefaultResponse(msg="Password changed successfully")
 
     @router.post("/reset-password")
-    @send_email_with_code("password_reset")
+    @send_email_with_code("reset_password")
     async def reset_password(self, bg_task: BackgroundTasks, email: str = Body(embed=True),
-                             db_user: User = Depends(user_exists)) -> DefaultResponse:
-        await check_if_code_already_exists(self.db, db_user, CodeType.PASSWORD_RESET)
-        code = await create_code(self.db, db_user, "reset_password")
+                             user: User = Depends(user_exists)) -> DefaultResponse:
+        await check_if_code_already_exists(self.db, user, CodeType.PASSWORD_RESET)
+        code = await create_code(self.db, user, "reset_password")
         return DefaultResponse(msg=f"{settings.LINK}password-recovery?code={code}")
 
 

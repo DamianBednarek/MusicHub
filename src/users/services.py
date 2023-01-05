@@ -16,7 +16,7 @@ async def upload_picture(file: UploadFile, bg_task: BackgroundTasks, current_use
     validate_file(file, ALLOWED_PICTURE_EXTENSIONS)
     bg_task.add_task(upload_to_bucket, file, StorageDirectories.PROFILE_AVATAR)
     return await crud.update_user(
-        current_user, db, profile_avatar=f"{settings.STORAGE_LINK}/pictures/{file.filename}"
+        current_user, db, profile_avatar=f"{settings.STORAGE_LINK}/{StorageDirectories.PROFILE_AVATAR}/{file.filename}"
     )
 
 

@@ -5,4 +5,4 @@ from pydantic import BaseModel
 
 class DefaultResponse(BaseModel):
     msg: str
-    details: dict[Any, Any] | None
+    details: dict[Any, Any] | None = {}
