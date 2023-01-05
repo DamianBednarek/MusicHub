@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from src.users.crud import create_user
 from src.users.models import User
-from .userFactory import UserFactory
+from .test_user.userFactory import UserFactory
 
 
 async def make_post_request(client: AsyncClient, response_status: int = 422, **kwargs):

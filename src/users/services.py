@@ -3,9 +3,10 @@ from sqlalchemy.orm import Session
 
 from src.auth.models import Code
 from src.aws.bucket import upload_to_bucket
-from src.common.constants import ALLOWED_PICTURE_EXTENSIONS
+from src.common.constants import ALLOWED_PICTURE_EXTENSIONS, StorageDirectories
+from src.common.validators import validate_file
+from src.core.config import settings
 from src.core.security import check_passwords_match, get_password_hash
-from src.tracks.validators import validate_file
 from src.users import crud
 from src.users.exceptions import UserException
 from src.users.models import User
@@ -13,9 +14,9 @@ from src.users.models import User
 
 async def upload_picture(file: UploadFile, bg_task: BackgroundTasks, current_user: User, db: Session) -> User:
     validate_file(file, ALLOWED_PICTURE_EXTENSIONS)
-    bg_task.add_task(upload_to_bucket(file))
+    bg_task.add_task(upload_to_bucket, file, StorageDirectories.PROFILE_AVATAR)
     return await crud.update_user(
-        current_user, db, profile_avatar=file.filename
+        current_user, db, profile_avatar=f"{settings.STORAGE_LINK}/{StorageDirectories.PROFILE_AVATAR}/{file.filename}"
     )
 
 

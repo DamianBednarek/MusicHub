@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, FileUrl, validator, Extra
+from pydantic import BaseModel, EmailStr, validator, Extra
 
 from src.users.constants import MIN_STR_LENGTH, MAX_STR_LENGTH
 from src.users.validators import (
@@ -12,7 +12,6 @@ class BaseUser(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
-    profile_avatar: FileUrl | None = None
 
     _check_first_last_name = validator("first_name", "last_name", allow_reuse=True)(
         validate_names
@@ -35,7 +34,7 @@ class NewPasswordForm(BaseModel):
     )
 
 
-class CreateUser(BaseUser, NewPasswordForm):
+class CreateUser(NewPasswordForm, BaseUser):
     pass
 
 

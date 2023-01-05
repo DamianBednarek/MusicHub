@@ -5,7 +5,7 @@ from src.auth.router import router as auth_router
 from src.common import models
 from src.core.config import settings
 from src.database import engine
-from src.exceptions.handler import CustomException, user_exception_handler
+from src.exceptions.handler import CustomException, user_exception_handler, validation_exception_handler
 from src.exceptions.jwtException import JwtException, jwt_exception_handler
 from src.logger import LoggerMiddleware
 from src.tracks.router import router as track_router
@@ -20,6 +20,7 @@ app.add_middleware(LoggerMiddleware, info_file="info.log", error_file="errors.lo
 
 app.add_exception_handler(CustomException, user_exception_handler)
 app.add_exception_handler(JwtException, jwt_exception_handler)
+app.add_exception_handler(ValueError, validation_exception_handler)
 
 app.include_router(auth_router, tags=["authentication and registration"])
 app.include_router(user_router, tags=["user"])

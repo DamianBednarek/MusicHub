@@ -1,8 +1,11 @@
+from uuid import UUID
+
 from fastapi import UploadFile
 from pydantic import BaseModel
 
 
 class BaseTrack(BaseModel):
+    id: UUID
     filename: str
     file: str
     track_length: int

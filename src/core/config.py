@@ -5,6 +5,7 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "MusicHub"
+    CODE_EXPIRATION_TIME_HOURS: int = 24
 
     # website link
     LINK: str = "http://localhost:8000/"
@@ -42,6 +43,9 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID")
     GOOGLE_CLIENT_SECRET: str = os.getenv("GOOGLE_CLIENT_SECRET")
     SESSION_KEY: str = os.getenv("SESSION_KEY")
+
+    # ANTIVIRUS
+    ANTIVIRUS_API_KEY: str = os.getenv("ANTIVIRUS_API_KEY")
 
 
 settings = Settings()

@@ -133,3 +133,6 @@ dmypy.json
 
 # PyCharm
 .idea
+*.mp3
+*.ogg
+*.wav

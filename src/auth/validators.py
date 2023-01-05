@@ -5,12 +5,13 @@ from sqlalchemy.orm import Session
 from src.auth.crud import get_code_for_user
 from src.auth.models import Code
 from src.common.constants import CodeType
+from src.core.config import settings
 from src.exceptions.codeException import CodeException
 from src.users.models import User
 
 
 def validate_code(code: Code) -> None:
-    time = code.created_at + timedelta(days=1)
+    time = code.created_at + timedelta(hours=settings.CODE_EXPIRATION_TIME_HOURS)
     if time < datetime.now():
         raise CodeException("Code has expired")
 

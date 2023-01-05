@@ -5,8 +5,8 @@ from httpx import AsyncClient
 from sqlalchemy.orm import Session
 
 from src.auth.crud import get_code_for_user, create_code
+from src.tests.common import make_post_request
 from src.users.models import User
-from .common import make_post_request
 
 
 @pytest.mark.resetPassword

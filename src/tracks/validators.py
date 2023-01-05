@@ -1,6 +1,9 @@
-from fastapi import UploadFile
+import re
+
+from .constants import TRACK_NAME_REGEX
 
 
-def validate_file(file: UploadFile, allowed_extensions) -> None:
-    if extension := file.filename.split(".")[-1] not in allowed_extensions:
-        raise ValueError(f"{extension} extension is not allowed")
+def validate_track_name(value: str):
+    if re.match(TRACK_NAME_REGEX, value) is None:
+        raise ValueError("invalid file name")
+    return value

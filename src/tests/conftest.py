@@ -1,6 +1,15 @@
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
+
+from src.tests.test_tracks.trackFactory import TrackFactory
+
+
+class MockClass(MagicMock):
+    async def __call__(self, *args, **kwargs):
+        return super(MockClass, self).__call__(*args, **kwargs)
+
 
 patch('src.emailProvider.emailService.send_email_with_code', lambda *x, **y: lambda f: f).start()
+patch('src.AntivirusProvider.client.AntivirusScan.scan_for_malicious_content', new_callable=MockClass).start()
 
 import pytest
 from httpx import AsyncClient
@@ -49,7 +58,8 @@ async def client(db):
 
 @pytest.fixture(autouse=True)
 def provide_session_to_factories(db):
-    UserFactory._meta.sqlalchemy_session = db
+    for factory in [UserFactory, TrackFactory]:
+        factory._meta.sqlalchemy_session = db
 
 
 @pytest.fixture()
@@ -58,8 +68,9 @@ def get_user():
 
 
 @pytest.fixture(scope="function")
-def get_auth_user(get_user):
-    user = get_user
-    app.dependency_overrides[get_current_user] = lambda: get_user
+def get_auth_user(db):
+    user = UserFactory()
+    db.flush()
+    app.dependency_overrides[get_current_user] = lambda: user
     yield user
     app.dependency_overrides = {}

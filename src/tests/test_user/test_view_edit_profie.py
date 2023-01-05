@@ -3,8 +3,8 @@ import json
 import pytest
 from httpx import AsyncClient
 
+from src.tests.common import make_get_request, make_patch_request
 from src.users.models import User
-from .common import make_get_request, make_patch_request
 
 
 @pytest.mark.profile
